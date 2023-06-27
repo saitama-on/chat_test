@@ -34,20 +34,8 @@ var chat_div = document.getElementById("chat");
 
 window.onload = ()=>{
 
-  onAuthStateChanged(auth ,(user)=>{
-
-    if (user){
-        chat_div.style.display = "block";
-        login_div.style.display = "none";
-        console.log(user.email);
-        console.log(username.value);
-    }
-    else{
-
-        chat_div.style.display = "none";
-        login_div.style.display = "block";
-    }
-   })
+  chat_div.style.display = "none";
+  login_div.style.display = "block";
 }
 
 login_button_login.addEventListener("click" , ()=>{
@@ -55,8 +43,8 @@ login_button_login.addEventListener("click" , ()=>{
     const auth = getAuth(app);
     signInWithEmailAndPassword(auth , user_email_login.value , user_pass_login.value)
     .then((userCredential)=>{
-
-      
+      userCredential.user.displayName = username.value;
+        console.log(userCredential.user.displayName);
         login_div.style.display = "none";
         chat_div.style.display = "block";
       
@@ -90,10 +78,11 @@ go_button.addEventListener("click" , ()=>{
     
     
   const user = auth.currentUser;
-  const refr = ref(db ,  '/' + username.value);
+  console.log(user.displayName);
+  const refr = ref(db ,  '/' + user.displayName);
   update(refr ,{
 
-      msg: username.value + ':  ' + input_text.value
+      msg: String(user.displayName) + ':  ' + input_text.value
   });
   onValue(refr ,(snapshot)=>{
 
@@ -106,9 +95,6 @@ go_button.addEventListener("click" , ()=>{
 
     onlyOnce:true
   });
-  onChildAdded(ref(db), (snapshot)=>{
-
-    console.log(snapshot.val());
-  })
+  
 
 })
