@@ -95,6 +95,10 @@ go_button.addEventListener("click" , ()=>{
 
     onlyOnce:true
   });
+    onChildAdded(ref(db) , (snapshot)=>{
+
+    console.log(snapshot.child(user.displayName).val());
+  });
   
 
 })
